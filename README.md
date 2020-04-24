@@ -1,3 +1,3 @@
-# Thermal-conductivity
+Thermal-conductivity
 Calculating thermal conductivity
-# Just to urge myself to insist on writing code.
+Just to urge myself to insist on writing code.
