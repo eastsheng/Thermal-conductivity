@@ -6,6 +6,9 @@ def size(NPT_data,number_layers):
 	global system_size_x
 	global system_size_y
 	global size_layer
+	global xlo,xhi
+	global ylo,yhi
+	global zhi,zhi
 	with open(NPT_data,'r')as data:
 		for line in data:
 			# print(line)
@@ -15,17 +18,25 @@ def size(NPT_data,number_layers):
 			if length_line==4 and line[2] in ['xlo','ylo','zlo']:
 				# print(line)
 				if line[2]=='xlo':
-					system_size_x = (float(line[1])-float(line[0]))/10#nm
+					xhi = float(line[1])
+					xlo = float(line[0])
+					system_size_x = (xhi-xlo)/10#nm
 					print('Size of x direction of system =',system_size_x)
 				elif line[2]=='ylo':
-					system_size_y = (float(line[1])-float(line[0]))/10#nm
+					yhi = float(line[1])
+					ylo = float(line[0])					
+					system_size_y = (yhi-ylo)/10#nm
 					print('Size of y direction of system =',system_size_y)
 				# elif line[2]=='zlo':
 				# 	system_size_z = (float(line[1])-float(line[0]))/10#nm
 				# 	print('Size of z direction of system =',system_size_z)
 	size_layer = system_size_x/number_layers
+	print('x = ',system_size_x,';','y = ',system_size_y,'\n')
+	print('size of everylayer = ',size_layer)
+	print('xhi = ',xhi,';','xlo = ',xlo)
+	print('yhi = ',yhi,';','ylo = ',ylo)
 
-	return	system_size_x,system_size_y,size_layer#,system_size_z
+	return	system_size_x, system_size_y, size_layer, xhi, xlo, yhi, ylo#,system_size_z
 
 
 
