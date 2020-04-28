@@ -21,12 +21,12 @@ def size(NPT_data,number_layers):
 					xhi = float(line[1])
 					xlo = float(line[0])
 					system_size_x = (xhi-xlo)/10#nm
-					print('Size of x direction of system =',system_size_x)
+					# print('Size of x direction of system =',system_size_x)
 				elif line[2]=='ylo':
 					yhi = float(line[1])
 					ylo = float(line[0])					
 					system_size_y = (yhi-ylo)/10#nm
-					print('Size of y direction of system =',system_size_y)
+					# print('Size of y direction of system =',system_size_y)
 				# elif line[2]=='zlo':
 				# 	system_size_z = (float(line[1])-float(line[0]))/10#nm
 				# 	print('Size of z direction of system =',system_size_z)
@@ -35,7 +35,7 @@ def size(NPT_data,number_layers):
 		print('size of everylayer = ',size_layer,file=log)
 		print('xhi = ',xhi,';','xlo = ',xlo,file=log)
 		print('yhi = ',yhi,';','ylo = ',ylo,file=log)
-		print('\n',file=log)
+		# print('\n',file=log)
 
 	return	system_size_x, system_size_y, size_layer, xhi, xlo, yhi, ylo#,system_size_z
 
@@ -107,7 +107,7 @@ def heat_flux(filename1,filename2,timestep,J2ev):
 	return 
 
 #------------------Plot and fitting temperature profile--------------------#
-def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i):
+def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i,Plot=True):
 	log = open('log.txt','a')
 
 	temp_12=open(filename2,"r")
@@ -135,24 +135,26 @@ def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i):
 				# print(type(temp_gradient[1]))
 	fit = np.polyfit(x2,y2,1)#用1次多项式拟合
 	fit_fn = np.poly1d(fit)
-	print("温度梯度拟合公式:",fit_fn,file=log)#拟合多项式
-	print("斜率-温度梯度:" ,fit[0],"(K/nm)","\n"+"截距:",fit[1],"(K)",file=log)
-	print('\n',file=log)
+	print("Formula of tmperature grafient Fitting:",fit_fn,file=log)#拟合多项式
+	print("Slope:" ,fit[0],"(K/nm)","\n"+"Intercept:",fit[1],"(K)",file=log)
+	# print('\n',file=log)
 	global Temperature_gradient
 	Temperature_gradient=fit[0]
-	#-------坐标图
-	plt.scatter(x1,y1)
-	plt.plot(x2,fit_fn(x2),"r-",linewidth=4.0)
-	plt.title("Temperature profile")
-	plt.xlabel("Distance (nm)")
-	plt.ylabel("Temperature (K)")
-	plt.savefig(str(i)+"Temperature profile.png")
-	plt.show()
-	plt.close()
-	log.close()
+	if Plot==True:
+		#-plot
+		plt.scatter(x1,y1)
+		plt.plot(x2,fit_fn(x2),"r-",linewidth=4.0)
+		plt.title("Temperature profile")
+		plt.xlabel("Distance (nm)")
+		plt.ylabel("Temperature (K)")
+		plt.savefig(str(i)+"Temperature profile.png")
+		plt.show()
+		plt.close()
+		log.close()
+
 	return
 #------------------Plot and fitting heat flux--------------------#
-def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i):
+def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i,Plot=True):
 
 	with open(filename2) as Q:
 		x1=list()
@@ -170,36 +172,37 @@ def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i):
 	log = open('log.txt','a')
 	fit = np.polyfit(x2,y2,1)#用1次多项式拟合
 	fit_fn1 = np.poly1d(fit)
-	print("热流拟合公式：",fit_fn1,file=log)
-	print("热流为：",fit[0],"(J/ns)",file=log)
-	print("截距为：",fit[1],"(J)\n",file=log)
-	print('\n',file=log)
+	print("Formula of Heat flux Fitting:",fit_fn1,file=log)
+	print("Heat flux:",fit[0],"(J/ns)",file=log)
+	print("Intercept:",fit[1],"(J)\n",file=log)
+	# print('\n',file=log)
 	global Heat_flux
 	Heat_flux=fit[0]
-	#-------坐标图
-	plt.plot(x1,y1,"o",linewidth=9.0)
-	plt.plot(x2,fit_fn1(x2),"r-",linewidth=3.0)
-	plt.title("Heat flux (J/ns)")
-	plt.xlabel("Time (ns)")
-	plt.ylabel("Energy (J)")
-	plt.savefig(str(i)+"Heat flux.png")
-	plt.show()
-	plt.close()
-	log.close()
+	if Plot == True:
+		#-plot
+		plt.plot(x1,y1,"o",linewidth=9.0)
+		plt.plot(x2,fit_fn1(x2),"r-",linewidth=3.0)
+		plt.title("Heat flux (J/ns)")
+		plt.xlabel("Time (ns)")
+		plt.ylabel("Energy (J)")
+		plt.savefig(str(i)+"Heat flux.png")
+		plt.show()
+		plt.close()
+		log.close()
 	return Heat_flux
 
 #------------------Calculate thermal conductivity--------------------#
-def Thermal_conductivity(filename3,thickness,i,dLdT=False):
+def Thermal_conductivity(filename3,thickness,i,dTdL=False):
 #Thermal conductivities are saved in filename3
 	with open(filename3,"a+") as tc_k,open('log.txt','a')as log:
 		A=system_size_y*thickness*(1e-18)#(m2)
 		# def TC(Heat_flux,Temperature_gradient,A=2.85e-18):
-		if dLdT==True:
+		if dTdL==True:
 			k=Heat_flux/(A*wentidu)
 		else:
 			k=-Heat_flux/(A*Temperature_gradient)
 
-		print('热导率值为:'+str(round(k,4)),'W/m-K\n',file=log)#round(要输出的值,保留几位小数)
+		print('Thermal conductivity:'+str(round(k,4)),'W/m-K\n',file=log)#round(要输出的值,保留几位小数)
 		print('\n',file=log)
 		tc_k.write(str(round(k,4)))
 		if i == 3:
