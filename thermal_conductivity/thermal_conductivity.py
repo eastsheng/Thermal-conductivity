@@ -36,6 +36,7 @@ def size(NPT_data,number_layers):
 		print('xhi = ',xhi,';','xlo = ',xlo,file=log)
 		print('yhi = ',yhi,';','ylo = ',ylo,file=log)
 		# print('\n',file=log)
+		print('size() done!')
 
 	return	system_size_x, system_size_y, size_layer, xhi, xlo, yhi, ylo#,system_size_z
 
@@ -61,10 +62,10 @@ def temp_grad(filename1,filename2,number_layers):
 				temp_12.write(" ")
 				temp_12.write(str(temperature))
 				temp_12.write("\n")
-	return 
+	return  print('temp_grad() done!')
 
 #------------------Calculate the temperature gradient in different way--------------------#
-def temp_grad_dLdT(filename,number_layers,number_fixed,number_bath):
+def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath):
 	L = system_size_x-system_size_x/number_layers*(number_fixed*2+number_bath*2) #nm
 	# wentidu=0.0
 	global wentidu
@@ -80,7 +81,7 @@ def temp_grad_dLdT(filename,number_layers,number_fixed,number_bath):
 
 		wentidu=(hight_temp-low_temp)/L
 		print('Temperature gradient (dT/dL)：',wentidu,file=log)
-	return
+	return  print('temp_grad_dTdL() done!')
 
 #------------------Read input and output energies for calculating heat flux--------------------#
 def heat_flux(filename1,filename2,timestep,J2ev):
@@ -104,7 +105,7 @@ def heat_flux(filename1,filename2,timestep,J2ev):
 				Q.write("\n")
 		ener_1.close()
 		Q.close()
-	return 
+	return print('heat_flux() done!')
 
 #------------------Plot and fitting temperature profile--------------------#
 def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i,Plot=True):
@@ -152,7 +153,7 @@ def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i,Plot=True):
 		plt.close()
 		log.close()
 
-	return
+	return print('plot_temp() done!')
 #------------------Plot and fitting heat flux--------------------#
 def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i,Plot=True):
 
@@ -189,7 +190,7 @@ def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i,Plot=True):
 		plt.show()
 		plt.close()
 		log.close()
-	return Heat_flux
+	return Heat_flux, print('plot_heatflux() done!')
 
 #------------------Calculate thermal conductivity--------------------#
 def Thermal_conductivity(filename3,thickness,i,dTdL=False):
@@ -209,7 +210,7 @@ def Thermal_conductivity(filename3,thickness,i,dTdL=False):
 			tc_k.write('\n')
 		else:
 			tc_k.write(' ')
-	return
+	return print('Thermal_conductivity() done!')
 
 #write data for calculating the Transmission
 #default MoS2, if number_atom_type==3, it is MoS2-MoSe2 heterostructure
@@ -392,10 +393,10 @@ def write_dataforTransmission(filename1,filename2,number_atom_type=2):
 							latter.write(line[10])
 							latter.write(line[11])
 							latter.write('\n')	
-
+	return print('write_dataforTransmission() done!')
 
 #Calculating DeltaT for Transmission
 def DeltaT_calculate():
 	DeltaT = abs(Temperature_gradient*system_size_x)
 	print('DeltaT=',round(DeltaT,4),'K')
-	return DeltaT
+	return DeltaT,print('DeltaT_calculate() done!')
