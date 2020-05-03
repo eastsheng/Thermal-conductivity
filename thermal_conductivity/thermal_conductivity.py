@@ -108,14 +108,14 @@ def heat_flux(filename1,filename2,timestep,J2ev):
 	return print('heat_flux() done!')
 
 #------------------Plot and fitting temperature profile--------------------#
-def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i,Plot=True):
+def plot_temp(filename2,layers_fixed,number_fixed,number_bath,i,Templayer_times=5,Plot=True):
 	log = open('log.txt','a')
 
 	temp_12=open(filename2,"r")
 	# print(temp_12.read())
 	# xmin=5#nm
 	# xmax=50#nm
-	Temp_xmin=5*(number_fixed+number_bath)*size_layer#nm
+	Temp_xmin=Templayer_times*(number_fixed+number_bath)*size_layer#nm
 	Temp_xmax=system_size_x-Temp_xmin#nm	
 	x1=list()
 	y1=list()#全部
