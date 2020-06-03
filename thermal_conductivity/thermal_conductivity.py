@@ -65,7 +65,7 @@ def temp_grad(filename1,filename2,number_layers):
 	return  print('temp_grad() done!')
 
 #------------------Calculate the temperature gradient in different way--------------------#
-def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath,System_temp):
+def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath,System_temp,temp_difference=20):
 	L = system_size_x-system_size_x/number_layers*(number_fixed*2+number_bath*2) #nm
 	# wentidu=0.0
 	global wentidu
@@ -75,7 +75,8 @@ def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath,System_temp):
 			if float(L_line[0])==number_fixed+number_bath+1:
 				print('第',L_line[0],'层，高温：',L_line[2],file=log)
 				hight_temp=float(L_line[2])#K
-			elif float(L_line[0])==number_layers-number_fixed-number_bath and float(L_line[2])>(System_temp-10):
+			elif float(L_line[0])==number_layers-number_fixed-number_bath\
+			 and float(L_line[2])>(System_temp-temp_difference/2):
 				print('第',L_line[0],'层，低温：',L_line[2],file=log)
 				low_temp=float(L_line[2])#K
 
