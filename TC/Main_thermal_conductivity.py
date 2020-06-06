@@ -52,8 +52,13 @@ for i in range(1,k+1):
 		number_layers,number_fixed,number_bath,System_temp)
 
 	#计算热导率,默认使用拟合的温度梯度，若要使用dL/dT,需要将dLdT改成Ture
-	TC.Thermal_conductivity("Thermal_conductivity.txt",thickness,i,dTdL=False)
-
+	TC.Thermal_conductivity("Thermal_conductivity.txt",thickness,i,dTdL=3)
+'''
+Thermal conductivities are saved in filename3   
+dTdL=1,use fitting temperature gradient
+dTdL=2,without including highest and lowest temperatures
+dTdL=3,use directly temperature difference
+'''
 print('********************')
 print('********************')
 print('*****  Done!  ******')
