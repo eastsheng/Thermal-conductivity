@@ -62,3 +62,43 @@ Thermal conductivity:29.1772 W/m-K
 
 
 
+x =  32.35715858788264 ; y =  5.001633542334472
+size of everylayer =  0.26964298823235533
+xhi =  323.59505886641136 ; xlo =  0.023472987585023475
+yhi =  49.93890165467303 ; ylo =  -0.07743376867168905
+Formula of tmperature grafient Fitting:  
+-0.3087 x + 305.3
+Slope: -0.30865321821677383 (K/nm) 
+Intercept: 305.293545270481 (K)
+Formula of Heat flux Fitting:  
+2.914e-17 x - 1.888e-18
+Heat flux: 2.9138239384644145e-17 (J/ns)
+Intercept: -1.8880161066139317e-18 (J)
+
+第 5.0 层，高温： 306.229
+第 116.0 层，低温： 293.858
+Temperature gradient (dT/dL)： 0.4096355624410896
+Thermal conductivity:29.1772 W/m-K
+
+
+
+x =  32.35715858788264 ; y =  5.001633542334472
+size of everylayer =  0.26964298823235533
+xhi =  323.59505886641136 ; xlo =  0.023472987585023475
+yhi =  49.93890165467303 ; ylo =  -0.07743376867168905
+Formula of tmperature grafient Fitting:  
+-0.3087 x + 305.3
+Slope: -0.30865321821677383 (K/nm) 
+Intercept: 305.293545270481 (K)
+Formula of Heat flux Fitting:  
+2.914e-17 x - 1.888e-18
+Heat flux: 2.9138239384644145e-17 (J/ns)
+Intercept: -1.8880161066139317e-18 (J)
+
+第 5.0 层，高温： 306.229
+第 116.0 层，低温： 293.858
+Temperature gradient (dT/dL)： 0.4096355624410896
+Thermal conductivity:13.5985 W/m-K
+
+
+
