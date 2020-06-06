@@ -69,6 +69,7 @@ def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath,System_temp,t
 	L = system_size_x-system_size_x/number_layers*(number_fixed*2+number_bath*2) #nm
 	# wentidu=0.0
 	global wentidu
+	global wentidu_Dt
 	with open(filename)as wendu,open('log.txt','a')as log:
 		for line in wendu:
 			L_line=line.strip().split()
@@ -80,9 +81,11 @@ def temp_grad_dTdL(filename,number_layers,number_fixed,number_bath,System_temp,t
 				print('第',L_line[0],'层，低温：',L_line[2],file=log)
 				low_temp=float(L_line[2])#K
 
-		wentidu=(hight_temp-low_temp)/L
+		wentidu=(hight_temp-low_temp)/L#without including highest and lowest temperatures
+		wentidu_Dt=temp_difference/L#use directly temperature difference
 		print('Temperature gradient (dT/dL)：',wentidu,file=log)
 	return  print('temp_grad_dTdL() done!')
+
 
 #------------------Read input and output energies for calculating heat flux--------------------#
 def heat_flux(filename1,filename2,timestep,J2ev):
@@ -192,9 +195,9 @@ def plot_heatflux(filename2,Energy_xmin,Energy_xmax,i,Plot=True):
 		plt.close()
 		log.close()
 	return Heat_flux, print('plot_heatflux() done!')
-
+'''
 #------------------Calculate thermal conductivity--------------------#
-def Thermal_conductivity(filename3,thickness,i,dTdL=False):
+def Thermal_conductivity(filename3,thickness,i,dTdL=False,):
 #Thermal conductivities are saved in filename3
 	with open(filename3,"a+") as tc_k,open('log.txt','a')as log:
 		A=system_size_y*thickness*(1e-18)#(m2)
@@ -203,6 +206,33 @@ def Thermal_conductivity(filename3,thickness,i,dTdL=False):
 			k=Heat_flux/(A*wentidu)
 		else:
 			k=-Heat_flux/(A*Temperature_gradient)
+
+		print('Thermal conductivity:'+str(round(k,4)),'W/m-K\n',file=log)#round(要输出的值,保留几位小数)
+		print('\n',file=log)
+		tc_k.write(str(round(k,4)))
+		if i == 3:
+			tc_k.write('\n')
+		else:
+			tc_k.write(' ')
+	return print('Thermal_conductivity() done!')
+'''
+#------------------Calculate thermal conductivity--------------------#
+'''
+Thermal conductivities are saved in filename3   
+dTdL=1,use fitting temperature gradient
+dTdL=2,without including highest and lowest temperatures
+dTdL=3,use directly temperature difference
+'''
+def Thermal_conductivity(filename3,thickness,i,dTdL=1):
+	with open(filename3,"a+") as tc_k,open('log.txt','a')as log:
+		A=system_size_y*thickness*(1e-18)#(m2)
+		# def TC(Heat_flux,Temperature_gradient,A=2.85e-18):
+		if dTdL==1:
+			k=-Heat_flux/(A*Temperature_gradient)
+		elif dTdL==2:
+			k=Heat_flux/(A*wentidu)
+		elif dTdL==3:
+			k=Heat_flux/(A*wentidu_Dt)
 
 		print('Thermal conductivity:'+str(round(k,4)),'W/m-K\n',file=log)#round(要输出的值,保留几位小数)
 		print('\n',file=log)
