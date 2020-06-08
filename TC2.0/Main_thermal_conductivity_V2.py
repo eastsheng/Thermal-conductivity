@@ -16,6 +16,8 @@ number_bath = 2
 timestep=5e-7#ns
 
 #---------------------计算热导率从此处开始计算----------------------#
+print(30*'-','Done!',30*'-')
+
 for i in range(1,k+1):
 	TCv2.Area('MoS2_NPT.data',"log.txt",i,thickness=0.6469)
 
@@ -27,17 +29,11 @@ for i in range(1,k+1):
 	#Read input and output energies for calculating heat flux
 	#heat_flux(energy data,timestep,J2ev)#J2ev=1.602763e-19#ev转换为J
 	TCv2.heat_flux(str(i)+"_Ener_equ_"+str(System_temp)+"K.dat",i,timestep,Plot=False)
-
-
-	#计算热导率,默认使用拟合的温度梯度，若要使用dL/dT,需要将dLdT改成Ture
+	'''   
+	TempGrad_fator=1,use fitting temperature gradient.
+	TempGrad_fator=2,without including highest and lowest temperatures,namely hot and cold bath.
+	TempGrad_fator=3,use directly temperature difference.
+	'''
 	TCv2.Thermal_conductivity("Thermal_conductivity.txt",i,TempGrad_fator=1)
-'''   
-TempGrad_fator=1,use fitting temperature gradient.
-TempGrad_fator=2,without including highest and lowest temperatures,namely hot and cold bath.
-TempGrad_fator=3,use directly temperature difference.
-'''
-print('********************')
-print('********************')
-print('*****  Done!  ******')
-print('********************')
-print('********************')
+
+print(30*'-','Done!',30*'-')
