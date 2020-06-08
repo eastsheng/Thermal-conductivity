@@ -31,7 +31,7 @@ def Area(NPT_data,logfile,i,thickness=0.61):
 				# 	print('Size of z direction of system =',system_size_z,file=log)
 		area = system_size_y*thickness*(1e-18)
 		print('Area',str(i),' = ',area,'m^2',file=log)
-	return	 print('\n**********Area done!**********\nArea',str(i),'= ',area,'m^2\n')
+	return	 print('\n**********Area Done!**********\nArea',str(i),'= ',area,'m^2\n')
 
 
 #------------------Read temperature profile for calculating temperature gradient--------------------#
@@ -86,7 +86,7 @@ def temp_grad(tempfile,number_layers,number_fixed,number_bath,i,fit_factor=2,Plo
 	print('L2',L2,file=log)
 	log.close()
 	
-	return  print('temperature gradient done!\n',\
+	return  print('**********Temperature Gradient Done!**********',\
 		'\nTemperature_gradient_fit:',Temperature_gradient_fit,\
 		'\nTemperature_gradient_difference1:',Temperature_gradient_difference1,\
 		'\nTemperature_gradient_difference2:',Temperature_gradient_difference2)
@@ -131,7 +131,7 @@ def heat_flux(energyfile,i,timestep,J2ev=1.602763e-19,Plot=True):
 	plt.close()
 	log.close()
 
-	return print('\nheat_flux done!\n',\
+	return print('\n**********Heat Flux Done!**********',\
 		"\nHeat flux:",fit[0],"(J/ns)")
 
 '''   
@@ -157,4 +157,4 @@ def Thermal_conductivity(result,i,TempGrad_fator=1):
 			tc_k.write('\n')
 		else:
 			tc_k.write(' ')
-	return print('\n******Thermal conductivity calculations are completed!******\n')
+	return print('\n**********Thermal Conductivity Calculations are Completed**********\n')
