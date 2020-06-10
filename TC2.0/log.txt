@@ -11,7 +11,7 @@ Formula of Heat flux Fitting:
 Heat flux: 2.9138239384644145e-17 (J/ns)
 Intercept: -1.8880161066139317e-18 (J)
 
-Thermal conductivity:27.8143 W/m-K
+Thermal conductivity:14.1209 W/m-K
 
 
 
