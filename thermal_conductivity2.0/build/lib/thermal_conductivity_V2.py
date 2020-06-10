@@ -69,7 +69,9 @@ def temp_grad(tempfile,number_layers,number_fixed,number_bath,i,fit_factor=2,Plo
 		plt.show()
 	plt.close()
 	
-
+	global Temperature_gradient_difference1
+	global Temperature_gradient_difference2
+	
 	L1=system_size_x-thickness_eachlayer*(number_fixed*2+number_bath*2)
 	high_temp1=temperature[number_fixed+number_bath]
 	low_temp1=temperature[number_layers-number_fixed-number_bath-1]
