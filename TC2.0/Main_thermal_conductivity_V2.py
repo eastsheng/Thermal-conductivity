@@ -3,7 +3,7 @@ import thermal_conductivity_V2 as TCv2
 #case
 k = 1
 #系统尺寸(nm)
-thickness = 0.6469#0.61
+thickness = 0.61#0.6469#0.61
 #系统温度(K)
 System_temp = 300
 #层数
