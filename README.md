@@ -1,4 +1,4 @@
-<center>## Thermal-conductivity</center>  
+## Thermal-conductivity
 
 ---  
 * Calculating thermal conductivity;  
