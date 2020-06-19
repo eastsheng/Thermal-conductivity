@@ -1,4 +1,4 @@
-##<center>Thermal-conductivity</center>  
+## <center>Thermal-conductivity</center>  
 
 ---
 1. Calculating thermal conductivity2.0;  
