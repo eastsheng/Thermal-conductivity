@@ -1,17 +1,17 @@
 Formula of tmperature grafient Fitting:  
--0.3238 x + 305.5
-Slope: -0.32377682584420564 (K/nm) 
-Intercept: 305.4608594592149 (K)
-Temperature_gradient_difference1 306.229 293.858
-Temperature_gradient_difference2 310.159 290.211
-L1 30.200014682023795
-L2 31.278586634953214
+-0.5729 x + 310.5
+Slope: -0.5728580105384152 (K/nm) 
+Intercept: 310.4610168467175 (K)
+Temperature_gradient_difference1 312.964 286.738
+Temperature_gradient_difference2 327.478 272.959
+L1 3.309763564572245
+L2 5.13849215682463
 Formula of Heat flux Fitting:  
-2.914e-17 x - 1.888e-18
-Heat flux: 2.9138239384644145e-17 (J/ns)
-Intercept: -1.8880161066139317e-18 (J)
+1.584e-15 x - 1.116e-17
+Heat flux: 1.5838913848370593e-15 (J/ns)
+Intercept: -1.1159696481088376e-17 (J)
 
-Thermal conductivity:14.1209 W/m-K
+Thermal conductivity:671.7522 W/m-K
 
 
 
