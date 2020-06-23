@@ -1,11 +1,15 @@
 #Calculating the thermal condcutivity of 2D materials from NEMD dump------updated version2.0
 import matplotlib.pyplot as plt
 import numpy as np
-
-def Area(NPT_data,logfile,i,thickness=0.61):
+'''
+if heatflux_direction=1,namely, x direction is the heat flux direction
+elif heatflux_direction=2,namely, y direction is the heat flux direction
+'''
+def Area(NPT_data,logfile,i,thickness=0.61,heatflux_direction=1):
 	'''Area of out of plane is obtained from NPT data.'''
 	global area
 	global system_size_x
+	global system_size_y
 	with open(NPT_data,'r')as data,open(logfile,'w')as log:
 		log.write('********Run'+str(i)+'********\n')
 		for line in data:
@@ -29,17 +33,26 @@ def Area(NPT_data,logfile,i,thickness=0.61):
 				# 	zlo = float(line[0])
 				# 	system_size_z = (yhi-ylo)/10#nm
 				# 	print('Size of z direction of system =',system_size_z,file=log)
-		area = system_size_y*thickness*(1e-18)
+		if heatflux_direction==1:
+			area = system_size_y*thickness*(1e-18)
+		elif heatflux_direction==2:
+			area = system_size_x*thickness*(1e-18)
+		
 		print('Area',str(i),' = ',area,'m^2',file=log)
 	return	 print('\n**********Area Done!**********\nArea',str(i),'= ',area,'m^2\n')
 
 
 #------------------Read temperature profile for calculating temperature gradient--------------------#
-def temp_grad(tempfile,number_layers,number_fixed,number_bath,i,fit_factor=2,Plot=True):
+def temp_grad(tempfile,number_layers,number_fixed,number_bath,i,heatflux_direction=1,fit_factor=2,Plot=True):
 
 	log = open("log.txt","w")
 	temp_data=np.loadtxt(tempfile,skiprows=4)
-	thickness_eachlayer = system_size_x/number_layers
+
+	if heatflux_direction==1:
+		thickness_eachlayer = system_size_x/number_layers
+	elif heatflux_direction==2:
+		thickness_eachlayer = system_size_y/number_layers
+
 	coord_x=temp_data[:,0]*(thickness_eachlayer)
 	temperature=temp_data[:,3]
 
