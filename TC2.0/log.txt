@@ -1,3 +1,7 @@
+********Run2********
+Size of x direction of system = 6.052856452950822
+Size of y direction of system = 36.57457184504769
+Area 2  =  4.115942388006559e-18 m^2
 Formula of tmperature grafient Fitting:  
 -0.5729 x + 310.5
 Slope: -0.5728580105384152 (K/nm) 
