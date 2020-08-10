@@ -10,7 +10,8 @@ def Area(NPT_data,logfile,i,thickness=0.61,heatflux_direction=1):
 	global area
 	global system_size_x
 	global system_size_y
-	with open(NPT_data,'r')as data,open(logfile,'w')as log:
+
+	with open(NPT_data,'r')as data,open(logfile,'a')as log:
 		log.write('********Run'+str(i)+'********\n')
 		for line in data:
 			line = line.strip().split()
@@ -45,7 +46,7 @@ def Area(NPT_data,logfile,i,thickness=0.61,heatflux_direction=1):
 #------------------Read temperature profile for calculating temperature gradient--------------------#
 def temp_grad(tempfile,number_layers,number_fixed,number_bath,i,heatflux_direction=1,fit_factor=2,Plot=True):
 
-	log = open("log.txt","w")
+	log = open("log.txt","a")
 	temp_data=np.loadtxt(tempfile,skiprows=4)
 
 	if heatflux_direction==1:
