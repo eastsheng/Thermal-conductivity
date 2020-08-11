@@ -2,9 +2,9 @@ from distutils.core import setup
 
 setup(
 
-	name         = 'thermal_conductivity_V2',
-	version      = '2.1',
-	py_modules   = ['thermal_conductivity_V2'],
+	name         = 'ThermalConductivity',
+	version      = '3.0',
+	py_modules   = ['ThermalConductivity'],
 	author       = 'DongshengChen',
 	author_email = 'eastsheng@hotmail.com',
 	url          = 'https://github.com/eastsheng',

@@ -1,6 +1,6 @@
 ## Thermal-conductivity
 
 ---  
-* Calculating thermal conductivity;  
+* example  
 
-* Just to urge myself to insist on writing code.  
+* code 'ThermalConddcutivity'.  
