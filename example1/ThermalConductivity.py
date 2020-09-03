@@ -36,9 +36,9 @@ class ThermalConductivity(object):
 						zlo = float(line[0])
 						self.system_size_z = (zhi-zlo)/10#nm 真空层，一般用不到
 			if heatflux_direction==1:# 如果热流方向为x，y即是宽度
-				self.area = self.system_size_y*thickness*(1e-18)
+				self.area = self.system_size_y*self.thickness*(1e-18)
 			elif heatflux_direction==2:
-				self.area = self.system_size_x*thickness*(1e-18)	
+				self.area = self.system_size_x*self.thickness*(1e-18)	
 			print('Area_'+str(self.case),'=',self.area,'m^2\n')
 		return
 		
