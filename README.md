@@ -3,4 +3,4 @@
 ---  
 * example  
 
-* code 'ThermalConddcutivity'.  
+* code 'ThermalConductivity'.  
