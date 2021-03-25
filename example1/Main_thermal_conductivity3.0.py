@@ -18,21 +18,23 @@ timestep=5e-7#ns
 #热流方向 heatflux_direction=1：x方向为热流方向；heatflux_direction=2：y方向为热流方向
 heatflux_direction = 1
 
+path_tc = '../example1/'
+
 #---------------------计算热导率从此处开始计算----------------------#
 print(30*'-','Done!',30*'-')
 tc = TC.ThermalConductivity()
 for i in range(1,k+1):
-	relax_data = 'MoS2_NPT.data'#'./0811/TC3.0/MoS2_NPT.data'
+	relax_data = path_tc+'MoS2_NPT.data'#'./0811/TC3.0/MoS2_NPT.data'
 	tc.read_size(relax_data,i,thickness,heatflux_direction)
 
 	#Read temperature profile for calculating temperature gradient
 	temperaturefile = str(i)+"_temp_equ_"+str(System_temp)+"K.dat"#'./0811/TC3.0/'+str(i)+"_temp_equ_"+str(System_temp)+"K.dat"
-	tc.temp_grad(temperaturefile,number_layers,number_fixed,number_bath,fit_factor=3,Plot=True)
+	tc.temp_grad(path_tc,temperaturefile,number_layers,number_fixed,number_bath,fit_factor=3,Plot=True)
 
 	#Read input and output energies for calculating heat flux
 
 	heatfluxfile =str(i)+"_Ener_equ_"+str(System_temp)+"K.dat" #'./0811/TC3.0/'+str(i)+"_Ener_equ_"+str(System_temp)+"K.dat"
-	tc.heat_flux(heatfluxfile,timestep)
+	tc.heat_flux(path_tc,heatfluxfile,timestep)
 
 	'''   
 	TempGrad_fator=1,use fitting temperature gradient.

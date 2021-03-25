@@ -51,7 +51,7 @@ class ThermalConductivity(object):
 		return
 		
 	#------------------Read temperature profile for calculating temperature gradient--------------------#
-	def temp_grad(self,tempfile,number_layers,number_fixed,number_bath,fit_factor,Plot=True):
+	def temp_grad(self,path_tc,tempfile,number_layers,number_fixed,number_bath,fit_factor,Plot=True):
 		self.tempfile = tempfile
 		self.number_layers = number_layers
 		self.number_fixed = number_fixed
@@ -94,7 +94,7 @@ class ThermalConductivity(object):
 		plt.title("Temperature profile")
 		plt.xlabel("x coord (nm)")
 		plt.ylabel("Temperature (K)")
-		plt.savefig(str(self.case)+"Temperature profile.png")
+		plt.savefig(path_tc+str(self.case)+"Temperature profile.png")
 		if Plot==True:
 			plt.show()
 		plt.close()
@@ -121,7 +121,7 @@ class ThermalConductivity(object):
 
 
 	#------------------Read input and output energies for calculating heat flux--------------------#
-	def heat_flux(self,energyfile,timestep=5e-7):
+	def heat_flux(self,path_tc,energyfile,timestep=5e-7):
 		self.energyfile = energyfile
 		self.timestep = timestep#ns
 		self.J2ev = 1.602763e-19
@@ -154,7 +154,7 @@ class ThermalConductivity(object):
 		plt.title("Heat flux (J/ns)")
 		plt.xlabel("Time (ns)")
 		plt.ylabel("Energy (J)")
-		plt.savefig(str(self.case)+"Heat flux.png")
+		plt.savefig(path_tc+str(self.case)+"Heat flux.png")
 		if self.plot==True:
 			plt.show()
 		plt.close()

@@ -8,3 +8,33 @@ Temperature gradient of difference1 = 0.4096355624410896
 Temperature gradient of difference2 = 0.6377526015740262
 Heat Flux = 2.9138239384644145e-17(J/ns)
 Thermal Conductivity = 29.49686373624023(W/m-K)
+----- Run 1-----
+x = 32.35715858788264 nm
+y = 5.001633542334472 nm
+z = 6.747087210987145 nm
+Area = 3.0509964608240284e-18 m^2
+Temperature gradient of fit = -0.32377682584420564
+Temperature gradient of difference1 = 0.4096355624410896
+Temperature gradient of difference2 = 0.6377526015740262
+Heat Flux = 2.9138239384644145e-17(J/ns)
+Thermal Conductivity = 29.49686373624023(W/m-K)
+----- Run 1-----
+x = 32.35715858788264 nm
+y = 5.001633542334472 nm
+z = 6.747087210987145 nm
+Area = 3.0509964608240284e-18 m^2
+Temperature gradient of fit = -0.32377682584420564
+Temperature gradient of difference1 = 0.4096355624410896
+Temperature gradient of difference2 = 0.6377526015740262
+Heat Flux = 2.9138239384644145e-17(J/ns)
+Thermal Conductivity = 29.49686373624023(W/m-K)
+----- Run 1-----
+x = 32.35715858788264 nm
+y = 5.001633542334472 nm
+z = 6.747087210987145 nm
+Area = 3.0509964608240284e-18 m^2
+Temperature gradient of fit = -0.32377682584420564
+Temperature gradient of difference1 = 0.4096355624410896
+Temperature gradient of difference2 = 0.6377526015740262
+Heat Flux = 2.9138239384644145e-17(J/ns)
+Thermal Conductivity = 29.49686373624023(W/m-K)

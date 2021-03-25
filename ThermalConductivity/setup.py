@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
 
 	name         = 'ThermalConductivity',
-	version      = '3.0',
+	version      = '3.0.1',
 	py_modules   = ['ThermalConductivity'],
 	author       = 'DongshengChen',
 	author_email = 'eastsheng@hotmail.com',
