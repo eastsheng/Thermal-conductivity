@@ -179,6 +179,15 @@ class ThermalConductivity(object):
 		print('\n**********Thermal Conductivity Calculations are Completed**********\n')		
 		return 	
 
+	def thermal_resistance(self,result):
+		'''10.1002/smll.201602726'''
+		thermal_R = self.Temperature_gradient_difference1/self.Heat_flux
+		with open(result,'w') as tr:
+			tr.write(str(thermal_R))
+		
+		return 
+
+
 	def logfile(self,logname):
 		self.logname = logname
 		with open(logname,'a') as log:
