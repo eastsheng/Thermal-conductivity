@@ -40,7 +40,7 @@ class ThermalConductivity(object):
 			elif heatflux_direction==2:
 				self.area = self.system_size_x*self.thickness*(1e-18)	
 			print('Area_'+str(self.case),'=',self.area,'m^2\n')
-		return
+		return self.system_size_x, self.system_size_y, self.system_size_z, self.area
 		
 	#------------------Read temperature profile for calculating temperature gradient--------------------#
 	def temp_grad(self,path_tc,tempfile,number_layers,number_fixed,number_bath,fit_factor,Plot=True):
@@ -72,7 +72,7 @@ class ThermalConductivity(object):
 		y2=temperature[fit_range_T:self.number_layers-fit_range_T]
 		fit=np.polyfit(x2,y2,1)
 		fit_fn = np.poly1d(fit)
-		# 拟合的温度梯度
+		# 第一种温度梯度，拟合的温度梯度
 		self.Temperature_gradient_fit=fit[0]	
 
 		print("Formula of tmperature grafient Fitting: y= ",fit_fn)#拟合多项式
@@ -93,7 +93,7 @@ class ThermalConductivity(object):
 		high_temp1=temperature[self.number_fixed+self.number_bath]
 		low_temp1=temperature[self.number_layers-self.number_fixed-self.number_bath-1]
 		self.Temperature_gradient_difference1=(high_temp1-low_temp1)/L1
-		# 第二种温度梯度，直接使用初始温差,包括热浴层
+		# 第三种温度梯度，直接使用初始温差,包括热浴层
 		L2=self.system_size_x-thickness_eachlayer*(self.number_fixed*2)
 		high_temp2=temperature[self.number_fixed]
 		low_temp2=temperature[self.number_layers-self.number_fixed-1]
@@ -107,7 +107,7 @@ class ThermalConductivity(object):
 		print('High low temperature2(K)',high_temp2,low_temp2)
 		print('size L2',L2)
 
-		return 
+		return self.Temperature_gradient_fit,self.Temperature_gradient_difference1,self.Temperature_gradient_difference2
 
 
 	#------------------Read input and output energies for calculating heat flux--------------------#
@@ -148,7 +148,7 @@ class ThermalConductivity(object):
 		if self.plot==True:
 			plt.show()
 		plt.close()
-		return 
+		return fit[0]
 
 	'''   
 	TempGrad_fator=1,use fitting temperature gradient.
