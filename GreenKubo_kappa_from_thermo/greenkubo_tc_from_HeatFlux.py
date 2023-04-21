@@ -58,7 +58,7 @@ def read_heatflux(logfile,hf_labelx,hf_labely,hf_labelz,vol,nlog=3):
 def autocorr(Jx,mode):
 	l = len(Jx)
 	ac = signal.correlate(Jx,Jx, mode=mode)[-l:]
-	acx = ac/np.arange(l,0,-1)	
+	acx = ac/l #np.arange(l,0,-1)	
 	return acx
 
 def hfacf(Jx,Jy,Jz,mode="full"):
