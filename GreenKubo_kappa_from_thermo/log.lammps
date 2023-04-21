@@ -1,0 +1,14 @@
+LAMMPS (3 Mar 2020)
+# Sample LAMMPS input script for thermal conductivity of solid Ar
+
+units       real
+variable    T equal 70
+variable    V equal vol
+variable    dt equal 4.0
+variable    p equal 200     # correlation length
+variable    s equal 10      # sample interval
+variable    d equal $p*$s   # dump interval
+variable    d equal 200*$s   
+variable    d equal 200*10   
+
+log 1_green_kubo_tc_thermo_HeatFlux.lammps

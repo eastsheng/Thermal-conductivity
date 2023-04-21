@@ -1,0 +1,205 @@
+
+# convert from LAMMPS real units to SI
+
+variable    kB equal 1.3806504e-23    # [J/K] Boltzmann
+variable    kCal2J equal 4186.0/6.02214e23
+variable    A2m equal 1.0e-10
+variable    fs2s equal 1.0e-15
+variable    convert equal ${kCal2J}*${kCal2J}/${fs2s}/${A2m}
+variable    convert equal 6.95101741241486e-21*${kCal2J}/${fs2s}/${A2m}
+variable    convert equal 6.95101741241486e-21*6.95101741241486e-21/${fs2s}/${A2m}
+variable    convert equal 6.95101741241486e-21*6.95101741241486e-21/1e-15/${A2m}
+variable    convert equal 6.95101741241486e-21*6.95101741241486e-21/1e-15/1e-10
+
+# setup problem
+
+dimension    3
+boundary     p p p
+lattice      fcc 5.376 orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+Lattice spacing in x,y,z = 5.376 5.376 5.376
+region       box block 0 4 0 4 0 4
+create_box   1 box
+Created orthogonal box = (0 0 0) to (21.504 21.504 21.504)
+  1 by 2 by 2 MPI processor grid
+create_atoms 1 box
+Created 256 atoms
+  create_atoms CPU = 0.000274181 secs
+mass         1 39.948
+pair_style   lj/cut 13.0
+pair_coeff   * * 0.2381 3.405
+timestep     ${dt}
+timestep     4
+thermo       $d
+thermo       2000
+
+# equilibration and thermalization
+
+velocity     all create $T 102486 mom yes rot yes dist gaussian
+velocity     all create 70 102486 mom yes rot yes dist gaussian
+fix          NVT all nvt temp $T $T 10 drag 0.2
+fix          NVT all nvt temp 70 $T 10 drag 0.2
+fix          NVT all nvt temp 70 70 10 drag 0.2
+run          8000
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 15
+  ghost atom cutoff = 15
+  binsize = 7.5, bins = 3 3 3
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.152 | 3.152 | 3.152 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0           70   -505.75228            0   -452.54482   -1289.8945 
+    2000    75.909905   -455.27635            0   -397.57673    633.55017 
+    4000    69.070648   -458.84306            0     -406.342    490.33847 
+    6000    73.070108   -453.40271            0   -397.86164    702.95809 
+    8000    67.705789   -456.55825            0   -405.09464    571.09923 
+Loop time of 2.7263 on 4 procs for 8000 steps with 256 atoms
+
+Performance: 1014.121 ns/day, 0.024 hours/ns, 2934.378 timesteps/s
+99.2% CPU use with 4 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.673      | 1.7219     | 1.7553     |   2.3 | 63.16
+Neigh   | 0.046134   | 0.046909   | 0.047929   |   0.3 |  1.72
+Comm    | 0.75413    | 0.79282    | 0.8421     |   3.6 | 29.08
+Output  | 9.9659e-05 | 0.00020427 | 0.00051713 |   0.0 |  0.01
+Modify  | 0.099922   | 0.10643    | 0.11537    |   1.7 |  3.90
+Other   |            | 0.05801    |            |       |  2.13
+
+Nlocal:    64 ave 67 max 58 min
+Histogram: 1 0 0 0 0 0 0 1 1 1
+Nghost:    2073 ave 2079 max 2070 min
+Histogram: 1 1 1 0 0 0 0 0 0 1
+Neighs:    11614.5 ave 12302 max 10729 min
+Histogram: 1 0 0 0 0 0 2 0 0 1
+
+Total # of neighbors = 46458
+Ave neighs/atom = 181.477
+Neighbor list builds = 113
+Dangerous builds = 0
+
+# thermal conductivity calculation, switch to NVE if desired
+
+#unfix       NVT
+#fix         NVE all nve
+
+reset_timestep 0
+compute      myKE all ke/atom
+compute      myPE all pe/atom
+compute      myStress all stress/atom NULL virial
+compute      flux all heat/flux myKE myPE myStress
+variable     Jx equal c_flux[1]/vol
+variable     Jy equal c_flux[2]/vol
+variable     Jz equal c_flux[3]/vol
+fix          JJ all ave/correlate $s $p $d              c_flux[1] c_flux[2] c_flux[3] type auto file J0Jt.dat ave running
+fix          JJ all ave/correlate 10 $p $d              c_flux[1] c_flux[2] c_flux[3] type auto file J0Jt.dat ave running
+fix          JJ all ave/correlate 10 200 $d              c_flux[1] c_flux[2] c_flux[3] type auto file J0Jt.dat ave running
+fix          JJ all ave/correlate 10 200 2000              c_flux[1] c_flux[2] c_flux[3] type auto file J0Jt.dat ave running
+variable     scale equal ${convert}/${kB}/$T/$T/$V*$s*${dt}
+variable     scale equal 4.83166430676946e-16/${kB}/$T/$T/$V*$s*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/$T/$T/$V*$s*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/70/$T/$V*$s*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/70/70/$V*$s*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/70/70/9943.923032064*$s*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/70/70/9943.923032064*10*${dt}
+variable     scale equal 4.83166430676946e-16/1.3806504e-23/70/70/9943.923032064*10*4
+variable     k11 equal trap(f_JJ[3])*${scale}
+variable     k11 equal trap(f_JJ[3])*28.7289125255705
+variable     k22 equal trap(f_JJ[4])*${scale}
+variable     k22 equal trap(f_JJ[4])*28.7289125255705
+variable     k33 equal trap(f_JJ[5])*${scale}
+variable     k33 equal trap(f_JJ[5])*28.7289125255705
+thermo_style custom step temp v_Jx v_Jy v_Jz v_k11 v_k22 v_k33
+run          100000
+Per MPI rank memory allocation (min/avg/max) = 5.027 | 5.027 | 5.027 Mbytes
+Step Temp v_Jx v_Jy v_Jz v_k11 v_k22 v_k33 
+       0    67.705789 9.3700316e-07 1.9225632e-06 -2.4098186e-06 0.0012470585 0.0052500802   0.00824847 
+    2000    72.281269 1.9073017e-06 2.4524801e-06 1.611283e-06   0.43847221  0.077604687     1.377632 
+    4000    68.337613 -2.4787347e-06 7.3094324e-06  -2.3158e-06   0.46749492  -0.21924115    2.1773456 
+    6000    68.523704 3.0499186e-07 7.6655291e-07 -1.3788607e-06   0.33439311  -0.09053451     1.127679 
+    8000    71.217943 -2.9397293e-07 3.5867116e-06 -7.9429064e-07    0.3169438 0.0076232564   0.83324164 
+   10000    74.376858 2.1702036e-06 1.5650139e-07 -1.4216455e-06   0.30403928   0.16656809    0.6616682 
+   12000    71.757303 1.9939202e-06 -2.3712416e-06 -1.4720127e-06   0.30109872   0.17647446   0.54112983 
+   14000    75.550738 1.4659662e-06 -1.2741432e-06 -3.0016027e-06   0.33714622   0.17220975   0.67284443 
+   16000      72.2155 -6.9021962e-06  6.54541e-07 1.7944285e-07   0.30724219   0.20457177   0.61614951 
+   18000    68.063136 1.1407695e-06 1.9534077e-06 -4.0980331e-06   0.34168593   0.27471406   0.68415528 
+   20000    74.310202 -2.7857656e-06 -1.9747978e-06 1.0996251e-07   0.35837093   0.21196179   0.73083252 
+   22000    73.619473 -4.2424124e-06 1.8522415e-06 2.2508104e-06   0.29524362   0.30050987   0.64860583 
+   24000    65.434042 6.7211658e-07 -9.1613069e-07 1.2447083e-06   0.29534066   0.32355954   0.61484491 
+   26000    72.959614 1.4393091e-07 -1.7665858e-06 -2.2732581e-07   0.25924713   0.28326879   0.64568737 
+   28000    65.786699 3.503458e-06 1.1427124e-06 -3.6823823e-06   0.25617309   0.34174571    0.7060406 
+   30000    70.745696 2.8285651e-06 -5.0511923e-06 -4.4972995e-06   0.27797453   0.37581674   0.65534345 
+   32000    70.198113 -7.7144383e-07 5.4204156e-07 -1.8922346e-06   0.28071339   0.41176671   0.61276582 
+   34000    73.681635 -1.6677591e-06 3.3695785e-06 4.3820788e-06   0.30162485   0.41699737   0.57868121 
+   36000    73.192518 -7.8102892e-06 -9.4942116e-06 2.1412049e-06   0.28031583   0.38370977   0.54729718 
+   38000    62.430605 -1.8646486e-06 -9.0412146e-08 1.0684748e-06   0.38684961   0.36906422   0.51543966 
+   40000    66.943264 -1.7826561e-06 1.6104346e-06 -3.4361436e-06   0.40555989   0.37634161   0.53237795 
+   42000    64.240652 -7.5368025e-07 7.3147484e-07 -1.6863721e-06   0.38566439   0.39440356   0.51042901 
+   44000    71.293728 -7.2135088e-07 -1.4486331e-06 -3.1808927e-06   0.36557317    0.3835224   0.48810656 
+   46000    68.290163 -5.5633619e-06 -4.1900407e-07 1.0441055e-06   0.34898514   0.36528419   0.47860215 
+   48000    72.123841 1.6791175e-06 8.1484922e-07 2.187349e-08   0.34229826   0.35004035   0.46815642 
+   50000    75.716725 6.2317367e-06 -3.3767977e-06 5.9624474e-07   0.32859805   0.34099221   0.46200447 
+   52000    66.916832 3.9217476e-06 -2.4415925e-06 -2.7416976e-06   0.32388384   0.33499061   0.44468206 
+   54000    72.834754 -3.4789195e-06 1.1817565e-07 -8.4250773e-06   0.32932228   0.31839212   0.46162368 
+   56000    68.611461 1.1788968e-06 -3.3563516e-06 1.9601546e-06   0.33684042   0.30691491   0.55563949 
+   58000    76.756886 -4.0335369e-06 -1.5520426e-07 -1.1421008e-07   0.31762534   0.30804831   0.55804962 
+   60000    64.541722 2.6374806e-06 4.4836959e-06 1.8964875e-06    0.3112055   0.29848174   0.53950682 
+   62000    74.587486 -1.0376615e-06 2.3347898e-06 -1.0501206e-06   0.30045468   0.27698433     0.522617 
+   64000    65.581335 -3.5005493e-06 -1.7201799e-06 -4.223766e-06   0.29256184   0.26513095   0.50911919 
+   66000    69.084396 1.2957523e-06 -3.0572062e-06 3.323764e-07     0.277381     0.292366   0.50277823 
+   68000    68.506116 1.9115267e-07 -2.7382614e-06 4.396212e-06    0.2750973   0.28947305   0.52598878 
+   70000     71.83485 1.4511719e-06 -5.2025256e-07 4.5274867e-06   0.29203933   0.27975016   0.53208044 
+   72000    66.492611 -3.1325087e-07 4.5759372e-07 -5.1142315e-06   0.27421001   0.27890035   0.65463264 
+   74000     69.26348 -4.5759867e-06 -2.2077085e-06 -1.1261421e-06   0.27318113   0.26952993   0.64342789 
+   76000    70.999391 2.2294648e-06 -2.5692649e-06 -2.6933271e-06   0.26519106    0.2626348   0.63704756 
+   78000    66.116029 -5.0286794e-07 -1.0657925e-06 -9.9943398e-07   0.26148934   0.25287768   0.61742194 
+   80000     64.03059 -2.3058003e-06 3.3811402e-06 2.2816426e-06   0.25240032   0.24676656   0.63854812 
+   82000    72.954646 -9.0554242e-07 4.3529304e-06 -2.1483201e-06   0.24877637   0.24924873   0.63242647 
+   84000    72.069767 4.008963e-07 -1.1293768e-07 -7.290974e-08   0.24534898   0.24335494   0.61738819 
+   86000    70.004604 -7.763361e-07 1.8507444e-06 -1.5572419e-06   0.24306904   0.24885473   0.60955709 
+   88000    73.567947 3.6465675e-06 4.4922684e-06 7.8689312e-08   0.24510669   0.25849473   0.59661553 
+   90000    73.145322 -1.8579142e-06 -3.2343554e-07 -2.4491236e-06   0.23440958    0.2537007   0.62710648 
+   92000    65.185516 -1.3689334e-07 3.518442e-06 -1.5910383e-07   0.22553933   0.27724983   0.66051895 
+   94000    71.975632 7.026088e-06 -1.8359367e-06 2.4726398e-06   0.22299478   0.27187154   0.65005022 
+   96000    66.171455 2.068173e-06 2.0937022e-06 -1.1979875e-06   0.24033343   0.27070618   0.63892339 
+   98000    75.552734 2.2532888e-06 1.7283043e-06 -1.7419029e-06   0.23701163    0.2670713    0.6233765 
+  100000    74.018735 1.8253466e-06 2.7338552e-07 -2.3846093e-06   0.26123145   0.26375087   0.62225515 
+Loop time of 41.8823 on 4 procs for 100000 steps with 256 atoms
+
+Performance: 825.169 ns/day, 0.029 hours/ns, 2387.642 timesteps/s
+99.1% CPU use with 4 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 23.803     | 24.639     | 25.047     |   9.9 | 58.83
+Neigh   | 0.57938    | 0.59523    | 0.6089     |   1.4 |  1.42
+Comm    | 11.854     | 12.448     | 13.247     |  14.4 | 29.72
+Output  | 0.022748   | 0.074821   | 0.092181   |  11.0 |  0.18
+Modify  | 3.0529     | 3.1731     | 3.372      |   7.4 |  7.58
+Other   |            | 0.9518     |            |       |  2.27
+
+Nlocal:    64 ave 70 max 59 min
+Histogram: 1 0 1 0 0 1 0 0 0 1
+Nghost:    2073 ave 2078 max 2067 min
+Histogram: 1 0 0 0 1 0 0 1 0 1
+Neighs:    11612.2 ave 12397 max 10975 min
+Histogram: 1 0 0 1 1 0 0 0 0 1
+
+Total # of neighbors = 46449
+Ave neighs/atom = 181.441
+Neighbor list builds = 1425
+Dangerous builds = 0
+variable     k equal (v_k11+v_k22+v_k33)/3.0
+variable     ndens equal count(all)/vol
+print        "average conductivity: $k[W/mK] @ $T K, ${ndens} /A\^3"
+average conductivity: 0.382412490910382[W/mK] @ 70 K, 0.0257443666020476 /A\^3
+Total wall time: 0:00:44
