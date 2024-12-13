@@ -1,0 +1,24 @@
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+>>> Date and Time: 2024-12-13, 21:28:53
+>>> logfile name: ./calc_log.log
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+>>> Read data Header successfully !
+>>> Read size of x direction successfully !
+>>> Read data Header successfully !
+>>> Read size of y direction successfully !
+>>> Area = 9.511628896872218e-17 m^2
+Formula of Heat flux Fitting:y2 =   
+-5.274e-23 x - 4.47e-15
+R = 9.018028463407866e-08 Km^2/W
+
+
+>>> add a fig successfully !
+
+
+>>> set a fig successfully !
+
+
+>>> set a fig successfully !
+
