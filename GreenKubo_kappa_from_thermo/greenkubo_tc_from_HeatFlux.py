@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from scipy import integrate
 from scipy import signal
 from pathlib import Path
-import ReadLog as RLog
+from readlog import ReadLog
 from tqdm import tqdm
 
 # convert timelapse from sec to H:M:S
@@ -44,10 +44,8 @@ def read_vol(lammpsdata):
 
 
 def read_heatflux(logfile,hf_labelx,hf_labely,hf_labelz,vol,nlog=3):
-	rl = RLog.ReadLog(logfile) 
-	thermou_list,thermod_list = rl.ReadUD(logfile)
-	# print(thermou_list,thermod_list)
-	pd_thermo = rl.ReadThermo(logfile,thermou_list,thermod_list,nlog)
+	rl = ReadLog(logfile) 
+	pd_thermo = rl.ReadThermo(nlog)
 	
 	hfx = np.transpose(pd_thermo[[hf_labelx]].values)[0]#*vol
 	hfy = np.transpose(pd_thermo[[hf_labely]].values)[0]#*vol
